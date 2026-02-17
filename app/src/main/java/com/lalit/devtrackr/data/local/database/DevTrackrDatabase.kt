@@ -1,6 +1,8 @@
 package com.lalit.devtrackr.data.local.database
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.lalit.devtrackr.data.local.Dao.DsaProblemDao
 import com.lalit.devtrackr.data.local.Entity.DsaProblem
@@ -13,4 +15,21 @@ import com.lalit.devtrackr.data.local.Entity.DsaProblem
 abstract class DevTrackrDatabase: RoomDatabase() {
 
     abstract fun DsaProblemDao(): DsaProblemDao
+
+    companion object{
+        @Volatile
+        private var INSTANCE: DevTrackrDatabase?= null
+
+        fun getDatabase(context: Context): DevTrackrDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    DevTrackrDatabase::class.java,
+                    "devtrackr_database"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
 }
