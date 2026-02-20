@@ -9,18 +9,16 @@
     tools:context=".ui.main.MainActivity">
 
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:navGraph="@navigation/nav_graph"
-        app:defaultNavHost="true"/>
+        android:id="@+id/fragment_container"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_menu"/>
+        app:menu="@menu/bottom_menu"
+        android:id="@+id/bottomMenu"/>
 
 
 </LinearLayout>

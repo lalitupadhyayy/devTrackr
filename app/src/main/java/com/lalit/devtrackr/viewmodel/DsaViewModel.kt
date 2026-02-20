@@ -19,7 +19,7 @@ class DsaViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val dao = DevTrackrDatabase
             .getDatabase(application)
-            .DsaProblemDao()
+            .dsaProblemDao()
 
         repository = DsaRepository(dao)
 

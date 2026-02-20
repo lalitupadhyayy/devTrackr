@@ -14,7 +14,7 @@ import com.lalit.devtrackr.data.local.Entity.DsaProblem
 )
 abstract class DevTrackrDatabase: RoomDatabase() {
 
-    abstract fun DsaProblemDao(): DsaProblemDao
+    abstract fun dsaProblemDao(): DsaProblemDao
 
     companion object{
         @Volatile
@@ -26,7 +26,9 @@ abstract class DevTrackrDatabase: RoomDatabase() {
                     context.applicationContext,
                     DevTrackrDatabase::class.java,
                     "devtrackr_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

@@ -7,11 +7,9 @@ import androidx.room.PrimaryKey
 data class DsaProblem (
         @PrimaryKey(autoGenerate = true)
         val id: Int = 0,
-
     val title: String,
     val platform: String,
     val difficulty: String,
-    val topic: String,
-    val datesolved: Long,
-    val notes: String?
+    val timecomplexity: String,
+    val datesolved: Long
 )
