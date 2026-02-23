@@ -35,4 +35,8 @@ class DsaAdapter : RecyclerView.Adapter<DsaAdapter.ViewHolder>() {
         problemList = list
         notifyDataSetChanged()
     }
+
+    fun getProblemAt(position: Int): DsaProblem {
+        return problemList[position]
+    }
 }
