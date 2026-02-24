@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -96,37 +97,53 @@ class ProblemFragment : Fragment(R.layout.fragment_problem) {
 
     private fun showAddProblemDialog() {
 
-        val dialogView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.dialog_add_problem, null)
+        val dialogBinding = com.lalit.devtrackr.databinding.DialogAddProblemBinding
+            .inflate(layoutInflater)
 
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Add Problem")
-            .setView(dialogView)
-            .setPositiveButton("Save") { _, _ ->
-                // Later we will extract data
-                val name =
-                    dialogView.findViewById<EditText>(R.id.etProblemName).text.toString()
-                val platform =
-                    dialogView.findViewById<EditText>(R.id.etPlatform).text.toString()
-                val difficulty =
-                    dialogView.findViewById<EditText>(R.id.etDifficulty).text.toString()
-                val complexity =
-                    dialogView.findViewById<EditText>(R.id.etComplexity).text.toString()
-
-                val problem = DsaProblem(
-                    title = name,
-                    platform = platform,
-                    difficulty = difficulty,
-                    timecomplexity = complexity,
-                    datesolved = System.currentTimeMillis()
-                )
-
-                viewModel.insert(problem)
-
-//                Toast.makeText(, "saved", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Cancel", null)
+            .setView(dialogBinding.root)
             .create()
+
+        // Dropdown Options
+        val platformOptions = listOf("LeetCode", "CodeStudio", "CodeChef", "HackerRank")
+        val difficultyOptions = listOf("Easy", "Medium", "Hard")
+        val complexityOptions = listOf("O(1)", "O(log n)", "O(n)", "O(nlog n)", "O(n²)", "O(2ⁿ)")
+
+        dialogBinding.actPlatform.setAdapter(
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, platformOptions)
+        )
+
+        dialogBinding.actDifficulty.setAdapter(
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, difficultyOptions)
+        )
+
+        dialogBinding.actComplexity.setAdapter(
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, complexityOptions)
+        )
+
+        dialogBinding.btnSave.setOnClickListener {
+
+            val name = dialogBinding.etTitle.text.toString().trim()
+            val platform = dialogBinding.actPlatform.text.toString().trim()
+            val difficulty = dialogBinding.actDifficulty.text.toString().trim()
+            val complexity = dialogBinding.actComplexity.text.toString().trim()
+
+            if (name.isEmpty() || platform.isEmpty() || difficulty.isEmpty() || complexity.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val problem = DsaProblem(
+                title = name,
+                platform = platform,
+                difficulty = difficulty,
+                timecomplexity = complexity,
+                datesolved = System.currentTimeMillis()
+            )
+
+            viewModel.insert(problem)
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
