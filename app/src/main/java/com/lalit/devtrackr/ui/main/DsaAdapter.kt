@@ -1,5 +1,3 @@
-package com.lalit.devtrackr.ui.main
-
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +12,25 @@ import java.util.Locale
 
 class DsaAdapter : RecyclerView.Adapter<DsaAdapter.ViewHolder>() {
 
-    private var problemList = listOf<DsaProblem>()
+    private var originalList = listOf<DsaProblem>()
+    private var filteredList = listOf<DsaProblem>()
+
+    fun setData(list: List<DsaProblem>) {
+        originalList = list
+        filteredList = list
+        notifyDataSetChanged()
+    }
+
+    fun filter(query: String) {
+        filteredList = if (query.isBlank()) {
+            originalList
+        } else {
+            originalList.filter {
+                it.title.contains(query, ignoreCase = true)
+            }
+        }
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title = itemView.findViewById<TextView>(R.id.tvTitle)
@@ -30,10 +46,12 @@ class DsaAdapter : RecyclerView.Adapter<DsaAdapter.ViewHolder>() {
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = problemList.size
+    override fun getItemCount(): Int = filteredList.size   // ✅ FIXED
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val problem = problemList[position]
+
+        val problem = filteredList[position]   // ✅ FIXED
+
         holder.title.text = problem.title
         holder.platform.text = problem.platform
         holder.difficulty.text = "Difficulty: ${problem.difficulty}"
@@ -51,13 +69,7 @@ class DsaAdapter : RecyclerView.Adapter<DsaAdapter.ViewHolder>() {
         }
     }
 
-
-    fun setData(list: List<DsaProblem>) {
-        problemList = list
-        notifyDataSetChanged()
-    }
-
     fun getProblemAt(position: Int): DsaProblem {
-        return problemList[position]
+        return filteredList[position]   // ✅ FIXED
     }
 }

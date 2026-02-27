@@ -1,5 +1,6 @@
 package com.lalit.devtrackr.ui.problem
 
+import DsaAdapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.lalit.devtrackr.R
 import com.lalit.devtrackr.data.local.Entity.DsaProblem
 import com.lalit.devtrackr.databinding.FragmentProblemBinding
-import com.lalit.devtrackr.ui.main.DsaAdapter
+
 import com.lalit.devtrackr.viewmodel.DsaViewModel
 import kotlinx.coroutines.launch
 
@@ -37,8 +39,8 @@ class ProblemFragment : Fragment(R.layout.fragment_problem) {
 
         _binding = FragmentProblemBinding.bind(view)
 
-        // ViewModel
-//        viewModel = ViewModelProvider(this)[DsaViewModel::class.java]
+
+
 
         binding.fabAdd.setOnClickListener {
             showAddProblemDialog()
@@ -51,6 +53,11 @@ class ProblemFragment : Fragment(R.layout.fragment_problem) {
             LinearLayoutManager(requireContext())
 
         binding.recyclerViewProblem.adapter = adapter
+
+        // search bar working
+        binding.searchEditText.addTextChangedListener {
+            adapter.filter(it.toString())
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.allProblems.collect { problemList ->

@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.topAppBar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 //        binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModel = ViewModelProvider(this)[DsaViewModel::class.java]
